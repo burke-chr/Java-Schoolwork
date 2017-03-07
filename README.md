@@ -1,3 +1,3 @@
 # Java-Schoolwork
 
-Problems form CS2510, Introduction to Object-Oriented Programming
+Problems from CS2510, Introduction to Object-Oriented Programming
