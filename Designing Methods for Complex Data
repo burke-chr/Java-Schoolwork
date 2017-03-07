@@ -1,3 +1,4 @@
+import tester.*;
 
 interface ILoXMLFrag {
 }
