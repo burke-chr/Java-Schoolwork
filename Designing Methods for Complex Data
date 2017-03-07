@@ -1,0 +1,74 @@
+
+interface ILoXMLFrag {
+}
+
+class MtLoXMLFrag implements ILoXMLFrag {
+}
+
+class ConsLoXMLFrag implements ILoXMLFrag {
+  XMLFrag first;
+  ILoXMLFrag document;
+  
+  ConsLoXMLFrag(XMLFrag first, ILoXMLFrag document) {
+    this.first = first;
+    this.document = document;
+  }
+}
+
+--------------------------------------------------------------------------
+
+interface IXMLFrag {
+}
+
+class Plaintext implements IXMLFrag{
+  String txt;
+  
+  Plaintext(String txt) {
+    this.txt = txt;
+  }
+}
+
+Tagged implements IXMLFrag {
+  Tag tag;
+  ILoXMLFrag content;
+  
+  Tagged(Tag tag, ILoXMLFrag content) {
+    this.tag = tag;
+    this.content = content;
+  }
+}
+
+--------------------------------------------------------------------------
+
+Tag {
+  String name;
+  ILoAtt atts;
+  
+  Tag(String name, ILoAtt atts) {
+    this.name;
+    this.atts;
+  }
+}
+
+
+--------------------------------------------------------------------------
+
+interface ILoAtts {
+}
+
+class MtILoAtts implememnts ILoAtts {
+}
+
+class ConsLoAtts implements ILoAtts {
+  String name;
+  String value;
+  
+  ConsLoAtts(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+}
+
+--------------------------------------------------------------------------
+
+
