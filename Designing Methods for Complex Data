@@ -100,3 +100,33 @@ class Attribute {
   }
 }
 
+--------------------------------------------------------------------------
+
+// examples of XML
+class ExamplesXML {
+  Att volumeAtt = new Att("volume", "30db");
+  Att durationAtt = new Att("duration, "5sec");
+  
+  Tag yellTag = new Tag("yell", new MtAtt());
+  Tag italicTag = new Tag("italic", new MtAtt());
+  Tag yell2Tag = new Tag("yell", new ConsAtt(this.volumeAtt, new MtAtt()));
+  Tag yell3Tag = new Tag("yell", new ConsAtt(this.volumeAtt, new ConsAtt(this.durationAtt, new MtAtt())));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
