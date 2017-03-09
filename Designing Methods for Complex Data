@@ -1,15 +1,19 @@
 import tester.*;
 
+// represents a list of documents
 interface ILoXMLFrag {
 }
 
+// represents an empty list of documents
 class MtLoXMLFrag implements ILoXMLFrag {
 }
 
+// represents a list of documents with at least one XMLFrag
 class ConsLoXMLFrag implements ILoXMLFrag {
   XMLFrag first;
   ILoXMLFrag document;
   
+  // the constructor
   ConsLoXMLFrag(XMLFrag first, ILoXMLFrag document) {
     this.first = first;
     this.document = document;
@@ -18,21 +22,26 @@ class ConsLoXMLFrag implements ILoXMLFrag {
 
 --------------------------------------------------------------------------
 
+// represents a document
 interface IXMLFrag {
 }
 
+// represents a document with just plaintext
 class Plaintext implements IXMLFrag{
   String txt;
   
+  // the constructor
   Plaintext(String txt) {
     this.txt = txt;
   }
 }
 
+// represents a document with at least one Tag
 Tagged implements IXMLFrag {
   Tag tag;
   ILoXMLFrag content;
   
+  // the constructor
   Tagged(Tag tag, ILoXMLFrag content) {
     this.tag = tag;
     this.content = content;
@@ -41,10 +50,12 @@ Tagged implements IXMLFrag {
 
 --------------------------------------------------------------------------
 
+// represents a Tag with a name an a List of Attributes
 Tag {
   String name;
   ILoAtt atts;
   
+  // the constructor
   Tag(String name, ILoAtt atts) {
     this.name;
     this.atts;
@@ -54,15 +65,18 @@ Tag {
 
 --------------------------------------------------------------------------
 
+// represents a list of Attributes
 interface ILoAtts {
 }
 
+// represents an empty list of Attributes
 class MtILoAtts implememnts ILoAtts {
 }
 
+// represents a list of Attributes with at least one Attribute
 class ConsLoAtts implements ILoAtts {
-  String name;
-  String value;
+  Att att;
+  ILoAtt rest;
   
   ConsLoAtts(String name, String value) {
     this.name = name;
