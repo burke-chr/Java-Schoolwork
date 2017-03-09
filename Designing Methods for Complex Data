@@ -14,8 +14,9 @@ class ConsLoXMLFrag implements ILoXMLFrag {
   ILoXMLFrag document;
   
   // the constructor
-  ConsLoXMLFrag(XMLFrag first, ILoXMLFrag document) {
-    this.first = first;
+
+ConsLoXMLFrag(XMLFrag first, ILoXMLFrag document) {
+/    this.first = first;
     this.document = document;
   }
 }
@@ -25,12 +26,12 @@ class ConsLoXMLFrag implements ILoXMLFrag {
 // represents a document
 interface IXMLFrag {
 }
-
+/
 // represents a document with just plaintext
 class Plaintext implements IXMLFrag{
   String txt;
   
-  // the constructor
+  // the constructor 
   Plaintext(String txt) {
     this.txt = txt;
   }
@@ -47,7 +48,7 @@ Tagged implements IXMLFrag {
     this.content = content;
   }
 }
-
+ 
 --------------------------------------------------------------------------
 
 // represents a Tag with a name an a List of Attributes
@@ -60,10 +61,11 @@ Tag {
     this.name;
     this.atts;
   }
-}
+}h
 
 
 --------------------------------------------------------------------------
+
 
 // represents a list of Attributes
 interface ILoAtts {
@@ -86,4 +88,15 @@ class ConsLoAtts implements ILoAtts {
 
 --------------------------------------------------------------------------
 
+// represents an Attribute
+class Attribute {
+  String name;
+  String value;
+  
+  // the constructor
+  Attribute(String name, String value) {
+    this.name = name;
+    this.value = value;
+  }
+}
 
