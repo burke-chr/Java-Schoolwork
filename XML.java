@@ -1,5 +1,3 @@
-// Designing methods for complex data
-
 import tester.*;
 
 // represents a list of documents
@@ -96,13 +94,51 @@ class Att {
 
 // examples of XML
 class ExamplesXML {
+  // examples of Attributes
   Att volumeAtt = new Att("volume", "30db");
   Att durationAtt = new Att("duration", "5sec");
 
+  // examples of Tags
+  Tag yellTag = new Tag("yell", new MtLoAtt());                  // <yell>...</yell>
+  Tag italicTag = new Tag("italic", new MtLoAtt());              // <italic>...</italic>
+  Tag yell2Tag = new Tag("yell", new ConsLoAtt(this.volumeAtt,   // <yell volume="30db">...</yell>
+      new MtLoAtt()));
+  Tag yell3Tag = new Tag("yell", new ConsLoAtt(this.volumeAtt,   // <yell volume="30db" duration="5sec">...</yell>
+      new ConsLoAtt(this.durationAtt, 
+          new MtLoAtt())));
   
-
-  Tag yellTag = new Tag("yell", new MtLoAtt());
-  Tag italicTag = new Tag("italic", new MtLoAtt());
-  Tag yell2Tag = new Tag("yell", new ConsLoAtt(this.volumeAtt, new MtLoAtt()));
-  Tag yell3Tag = new Tag("yell", new ConsLoAtt(this.volumeAtt, new ConsLoAtt(this.durationAtt, new MtLoAtt())));
+  // examples of XML
+  ILoXMLFrag first = new ConsLoXMLFrag(new Plaintext("I"),     // "I am XML!"
+      new ConsLoXMLFrag(new Plaintext("am"), 
+          new ConsLoXMLFrag(new Plaintext("XML"),
+              new ConsLoXMLFrag(new Plaintext("!"), 
+                  new MtLoXMLFrag()))));
+  ILoXMLFrag second = new ConsLoXMLFrag(new Plaintext("I"),   // "I am <yell>XML</yell>!"
+      new ConsLoXMLFrag(new Plaintext("am"), 
+          new ConsLoXMLFrag(new Tagged(this.yellTag, new ConsLoXMLFrag(new Plaintext("XML"), new MtLoXMLFrag())), 
+              new ConsLoXMLFrag(new Plaintext("!"), 
+                  new MtLoXMLFrag()))));
+  ILoXMLFrag third = new ConsLoXMLFrag(new Plaintext("I"),    // "I am <yell><italic>X</italic>ML</yell>!"
+      new ConsLoXMLFrag(new Plaintext("am"),
+          new ConsLoXMLFrag(new Tagged(this.yellTag, 
+              new ConsLoXMLFrag(new Tagged(this.italicTag, 
+                  new ConsLoXMLFrag(new Plaintext("X"), new MtLoXMLFrag())), 
+                  new ConsLoXMLFrag(new Plaintext("ML"), new MtLoXMLFrag()))), 
+              new ConsLoXMLFrag(new Plaintext("!"), new MtLoXMLFrag()))));  
+  ILoXMLFrag fourth = new ConsLoXMLFrag(new Plaintext("I"),   // "I am <yell volume="30db"><italic>X</italic>ML</yell>!"
+      new ConsLoXMLFrag(new Plaintext("am"),
+          new ConsLoXMLFrag(new Tagged(this.yell2Tag,
+              new ConsLoXMLFrag(new Tagged(this.italicTag,
+                  new ConsLoXMLFrag(new Plaintext("X"), new MtLoXMLFrag())),
+                  new ConsLoXMLFrag(new Plaintext("ML"), new MtLoXMLFrag()))), 
+              new ConsLoXMLFrag(new Plaintext("!"), new MtLoXMLFrag()))));
+  ILoXMLFrag fifth = new ConsLoXMLFrag(new Plaintext("I"),   // "I am <yell volume="30db" duration="5sec"><italic>X</italic>ML</yell>!"
+      new ConsLoXMLFrag(new Plaintext("am"),
+          new ConsLoXMLFrag(new Tagged(this.yell3Tag,
+              new ConsLoXMLFrag(new Tagged(this.italicTag,
+                  new ConsLoXMLFrag(new Plaintext("X"), new MtLoXMLFrag())), 
+                  new ConsLoXMLFrag(new Plaintext("ML"), new MtLoXMLFrag()))),
+              new ConsLoXMLFrag(new Plaintext("!"), new MtLoXMLFrag()))));
+  
+  
 }
