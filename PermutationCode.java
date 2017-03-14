@@ -1,9 +1,3 @@
-// Assignment 8 - Problem 3
-// Rothweiler Justin 
-// jrothweiler
-// Valluru Mahitha
-// mmv456
-
 import java.util.*;
 import tester.*;
 
