@@ -1,9 +1,3 @@
-// Assignment 8 - Problem 2
-// Rothweiler Justin 
-// jrothweiler
-// Valluru Mahitha
-// mmv456
-
 import tester.*;
 
 // To represent a two directional list
