@@ -8,6 +8,9 @@ interface ILoXMLFrag {
   int contentLength();
   // does this XML document have a tag with the given name?
   boolean hasTag(String that);
+  // does this XML document have an Attribute with the same name
+  // as the given String?
+  boolean hasAttribute(String that);
   
 }
 
@@ -21,6 +24,11 @@ class MtLoXMLFrag implements ILoXMLFrag {
   }
   // does this XML document have a tag with the given name?
   public boolean hasTag(String that){
+    return false;
+  }
+  // does this XML document have an Attribute with the same name
+  // as the given String?
+  public boolean hasAttribute(String that) {
     return false;
   }
 }
@@ -43,7 +51,12 @@ class ConsLoXMLFrag implements ILoXMLFrag {
   }
   // does this XML document have a tag with the given name?
   public boolean hasTag(String that){
-    return this.first.hasTagHelp(that) || this.document.hasTag(that);
+    return this.first.hasTagHelpOne(that) || this.document.hasTag(that);
+  }
+  // does this XML document have an Attribute with the same name
+  // as the given String?
+  public boolean hasAttribute(String that) {
+    return this.first.hasAttributeHelps(that) || this.document.hasAttribute(that);
   }
 }
 
@@ -54,7 +67,10 @@ interface IXMLFrag {
   int contentLengthHelp();
   // does this IXMLFrag have a Tag with the same
   // name as the string given?
-  boolean hasTagHelp(String that);
+  boolean hasTagHelpOne(String that);
+  // does this IXMLFrag have an Attribute with the same
+  // Attribute as the one with the given name?
+  boolean hasAttributeHelps(String that);
   
 }
 
@@ -73,7 +89,12 @@ class Plaintext implements IXMLFrag {
   }
   // does this IXMLFrag have a Tag with the same
   // name as the string given?
-  public boolean hasTagHelp(String that) {
+  public boolean hasTagHelpOne(String that) {
+    return false;
+  }
+  // does this IXMLFrag have an Attribute with the same
+  // Attribute as the one with the given name?
+  public boolean hasAttributeHelps(String that) {
     return false;
   }
 }
@@ -95,8 +116,13 @@ class Tagged implements IXMLFrag {
   }
   // does this IXMLFrag have a Tag with the same
   // name as the string given?
-  public boolean hasTagHelp(String that) {
-    return this.tag.hasTagAssist(that) || this.content.hasTag(that);
+  public boolean hasTagHelpOne(String that) {
+    return this.tag.hasTagHelpTwo(that) || this.content.hasTag(that);
+  }
+  // does this IXMLFrag have an Attribute with the same
+  // Attribute as the one with the given name?
+  public boolean hasAttributeHelps(String that) {
+    return this.tag.hasAttributeAssist(that) || this.content.hasAttribute(that);
   }
 }
 
@@ -111,19 +137,28 @@ class Tag {
   }
   
   // does this Tag have the same name as the string given?
-  boolean hasTagAssist(String that) {
+  boolean hasTagHelpTwo(String that) {
     return this.name.equals(that);
+  }
+  // does this Tag have an Attribute with the same name as
+  // the given name?
+  boolean hasAttributeAssist(String that) {
+    return this.atts.hasAttributeHelp(that);
   }
 }
 
 // represents a list of Attributes
 interface ILoAtt {
-  
+  // does this Attribute have the same name as the string given?
+  boolean hasAttributeHelp(String that);
 }
 
 // represents an empty list of Attributes 
 class MtLoAtt implements ILoAtt {
-  
+  // does this Attribute have the same name as the string given?
+  public boolean hasAttributeHelp(String that) {
+    return false;
+  }
 }
 
 // represents a list of Attributes with at least one Attribute
@@ -135,6 +170,11 @@ class ConsLoAtt implements ILoAtt {
     this.att = att;
     this.rest = rest;
   }
+  
+  // does this Attribute have the same name as the string given?
+  public boolean hasAttributeHelp(String that) {
+    return this.att.hasAttributeHelper(that) || this.rest.hasAttributeHelp(that);
+  }
 }
 
 // represents an Attribute
@@ -145,6 +185,11 @@ class Att {
   Att(String name, String value) {
     this.name = name;
     this.value = value;
+  }
+  
+  // does this Attribute have the same name as the string given?
+  boolean hasAttributeHelper(String that) {
+    return this.name.equals(that);
   }
 }
 
@@ -226,28 +271,28 @@ class ExamplesXML {
     t.checkExpect(this.xml4.contentLength(), 9);
   }
   
-  // tests the hasTagAssist(String) method, a helper for hasTagHelp(String)
-  void testHasTagAssist(Tester t) {
-    t.checkExpect(this.italicTag.hasTagAssist("italic"), true);
-    t.checkExpect(this.italicTag.hasTagAssist("yell"), false);
-    t.checkExpect(this.italicTag.hasTagAssist("hello"), false);
-    t.checkExpect(this.yellTag.hasTagAssist("yell"), true);
-    t.checkExpect(this.yellTag.hasTagAssist("italic"), false);
-    t.checkExpect(this.yellTag.hasTagAssist("world"), false);
-    t.checkExpect(this.yell2Tag.hasTagAssist("yell"), true);
-    t.checkExpect(this.yell2Tag.hasTagAssist("hello"), false);
-    t.checkExpect(this.yell3Tag.hasTagAssist("yell"), true);
-    t.checkExpect(this.yell3Tag.hasTagAssist("world"), false);
+  // tests the hasTagHelpTwo(String) method, a helper for hasTagHelpOne(String)
+  void testHasTagHelpTwo(Tester t) {
+    t.checkExpect(this.italicTag.hasTagHelpTwo("italic"), true);
+    t.checkExpect(this.italicTag.hasTagHelpTwo("yell"), false);
+    t.checkExpect(this.italicTag.hasTagHelpTwo("hello"), false);
+    t.checkExpect(this.yellTag.hasTagHelpTwo("yell"), true);
+    t.checkExpect(this.yellTag.hasTagHelpTwo("italic"), false);
+    t.checkExpect(this.yellTag.hasTagHelpTwo("world"), false);
+    t.checkExpect(this.yell2Tag.hasTagHelpTwo("yell"), true);
+    t.checkExpect(this.yell2Tag.hasTagHelpTwo("hello"), false);
+    t.checkExpect(this.yell3Tag.hasTagHelpTwo("yell"), true);
+    t.checkExpect(this.yell3Tag.hasTagHelpTwo("world"), false);
   }
   
-  // tests the hasTagHelp(String) method, a helper for hasTag(String)
+  // tests the hasTagHelpOne(String) method, a helper for hasTag(String)
   void testHasTagHelp(Tester t) {
-    t.checkExpect(this.plaintext.hasTagHelp("italic"), false);
-    t.checkExpect(this.plaintext.hasTagHelp("yell"), false);
-    t.checkExpect(this.tagged.hasTagHelp("italic"), true);
-    t.checkExpect(this.tagged.hasTagHelp("yell"), false);
-    t.checkExpect(this.complex.hasTagHelp("italic"), false);
-    t.checkExpect(this.complex.hasTagHelp("yell"), true);
+    t.checkExpect(this.plaintext.hasTagHelpOne("italic"), false);
+    t.checkExpect(this.plaintext.hasTagHelpOne("yell"), false);
+    t.checkExpect(this.tagged.hasTagHelpOne("italic"), true);
+    t.checkExpect(this.tagged.hasTagHelpOne("yell"), false);
+    t.checkExpect(this.complex.hasTagHelpOne("italic"), false);
+    t.checkExpect(this.complex.hasTagHelpOne("yell"), true);
   }
   
   // tests the hasTag(String) method
@@ -265,6 +310,16 @@ class ExamplesXML {
     t.checkExpect(this.xml5.hasTag("italic"), true);
     t.checkExpect(this.xml5.hasTag("yell"), true);
   }
+  
+  // tests the hasAttributeHelper(String) method, a helper for hasAttributeHelp(String)
+  void testHasAttributeHelper(Tester t) {
+    t.checkExpect(this.volumeAtt.hasAttributeHelper("volume"), true);
+    t.checkExpect(this.volumeAtt.hasAttributeHelper("duration"), false);
+    t.checkExpect(this.durationAtt.hasAttributeHelper("duration"), true);
+    t.checkExpect(this.durationAtt.hasAttributeHelper("volume"), false);
+  }
+  
+
   
   
   
