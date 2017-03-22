@@ -16,7 +16,8 @@ interface ILoXMLFrag {
   boolean hasAttributeinTag(String att, String tag);
   // converts XML to a String without Tags or Attributes
   String renderAsString();
-
+  // updates this XML's attributes with the given name and value
+  ILoXMLFrag updateAttribute(String name, String value);
 
 
 }
@@ -47,7 +48,10 @@ class MtLoXMLFrag implements ILoXMLFrag {
   public String renderAsString() {
     return "";
   }
-
+  // updates this XML's attributes with the given name and value
+  public ILoXMLFrag updateAttribute(String name, String value) {
+    return this;
+  }
 }
 
 // represents a list of documents with at least one XMLFrag
@@ -84,7 +88,10 @@ class ConsLoXMLFrag implements ILoXMLFrag {
   public String renderAsString() {
     return this.first.renderAsStringHelpOne() + this.document.renderAsString();
   }
-
+  // updates this XML's attributes with the given name and value
+  public ILoXMLFrag updateAttribute(String name, String value) {
+    return new ConsLoXMLFrag(this.first.updateAttHelpOne(name, value), this.document.updateAttribute(name, value));
+  }
 }
 
 // represents a document
@@ -103,6 +110,8 @@ interface IXMLFrag {
   boolean hasAttinTagHelpOne(String att, String tag);
   // converts XML to a String without Tags or Attributes
   String renderAsStringHelpOne();
+  // updates this XML's attributes with the given name and value
+  IXMLFrag updateAttHelpOne(String name, String value);
 
 }
 
@@ -137,6 +146,10 @@ class Plaintext implements IXMLFrag {
   // converts XML to a String without Tags or Attributes
   public String renderAsStringHelpOne() {
     return this.txt.toString();
+  }
+  // updates this XML's attributes with the given name and value
+  public IXMLFrag updateAttHelpOne(String name, String value) {
+    return this;
   }
 
 }
@@ -175,6 +188,10 @@ class Tagged implements IXMLFrag {
   public String renderAsStringHelpOne() {
     return this.content.renderAsString();
   }
+  // updates this XML's attributes with the given name and value
+  public IXMLFrag updateAttHelpOne(String name, String value) {
+    return new Tagged(this.tag.updateAttHelpTwo(name, value), this.content.updateAttribute(name, value));
+  }
 
 }
 
@@ -206,6 +223,10 @@ class Tag {
       return false;
     }
   }
+  // updates this XML's attributes with the given name and value
+  public Tag updateAttHelpTwo(String name, String value) {
+    return new Tag(this.name, this.atts.updateAttHelpThree(name, value));
+  }
 
 }
 
@@ -213,6 +234,8 @@ class Tag {
 interface ILoAtt {
   // does this Attribute have the same name as the string given?
   boolean hasAttributeHelpThree(String that);
+  // updates this XML's attributes with the given name and value
+  ILoAtt updateAttHelpThree(String name, String value);
 
 }
 
@@ -222,6 +245,10 @@ class MtLoAtt implements ILoAtt {
   public boolean hasAttributeHelpThree(String that) {
     return false;
   }
+//updates this XML's attributes with the given name and value
+ public ILoAtt updateAttHelpThree(String name, String value) {
+   return this;
+ }
 }
 
 // represents a list of Attributes with at least one Attribute
@@ -238,6 +265,10 @@ class ConsLoAtt implements ILoAtt {
   public boolean hasAttributeHelpThree(String that) {
     return this.att.hasAttributeHelpFour(that) || this.rest.hasAttributeHelpThree(that);
   }
+//updates this XML's attributes with the given name and value
+ public ILoAtt updateAttHelpThree(String name, String value) {
+   return new ConsLoAtt(this.att.updateAttHelpFour(name, value), this.rest.updateAttHelpThree(name, value));
+ }
 }
 
 // represents an Attribute
@@ -254,6 +285,15 @@ class Att {
   boolean hasAttributeHelpFour(String that) {
     return this.name.equals(that);
   }
+//updates this XML's attributes with the given name to the given value
+ public Att updateAttHelpFour(String name, String value) {
+   if (this.name.equals(name)) {
+     return new Att(this.name, value);
+   }
+   else {
+     throw new RuntimeException("No attribute with that name");
+   }
+ }
 
 }
 
@@ -564,6 +604,19 @@ class ExamplesXML {
     t.checkExpect(this.xml3.renderAsString(), "I am XML!");
     t.checkExpect(this.xml4.renderAsString(), "I am XML!");
     t.checkExpect(this.xml5.renderAsString(), "I am XML!");
+  }
+  
+  // tests the updateAttHelpFour(name, value) method, a helper for updateAttribute(name, value)
+  void testUpdateAttHelpFour(Tester t) {
+    t.checkExpect(this.volumeAtt.updateAttHelpFour("volume", "5miles"), new Att("volume", "5miles"));
+    t.checkExpect(this.durationAtt.updateAttHelpFour("duration", "30sec"), new Att("duration", "30sec"));
+  }
+  
+  // tests the updateAttHelpThree(name, value) method, a helper for updateAttribute(name, value)
+  void testUpdateAttHelpThree(Tester t) {
+    t.checkExpect(this.empty_loatt.updateAttHelpThree("length", "5miles"), this.empty_loatt);
+    t.checkExpect(this.volume_loatt.updateAttHelpThree("volume", "10dec"), 
+        new ConsLoAtt(new Att("volume", "10dec"), new MtLoAtt()));
   }
 
 
