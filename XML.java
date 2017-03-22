@@ -16,8 +16,7 @@ interface ILoXMLFrag {
   boolean hasAttributeinTag(String att, String tag);
   // converts XML to a String without Tags or Attributes
   String renderAsString();
-  // updates all attributes with the given name and the given value
-  ILoXMLFrag updateAttribute(String name, String value);
+
 
 
 }
@@ -48,10 +47,7 @@ class MtLoXMLFrag implements ILoXMLFrag {
   public String renderAsString() {
     return "";
   }
-  // updates all attributes with the given name and the given value
-  public ILoXMLFrag updateAttribute(String name, String value) {
-    return this;
-  }
+
 }
 
 // represents a list of documents with at least one XMLFrag
@@ -88,10 +84,7 @@ class ConsLoXMLFrag implements ILoXMLFrag {
   public String renderAsString() {
     return this.first.renderAsStringHelpOne() + this.document.renderAsString();
   }
-  // updates all attributes with the given name and the given value
-  public ILoXMLFrag updateAttribute(String name, String value) {
-    return new ConsLoXMLFrag(this.first.updateAttributeHelpOne(name, value), this.document.updateAttribute(name, value));
-  }
+
 }
 
 // represents a document
@@ -110,8 +103,6 @@ interface IXMLFrag {
   boolean hasAttinTagHelpOne(String att, String tag);
   // converts XML to a String without Tags or Attributes
   String renderAsStringHelpOne();
-  // updates all attributes with the given name and the given value
-  IXMLFrag updateAttributeHelpOne(String name, String value);
 
 }
 
@@ -147,10 +138,7 @@ class Plaintext implements IXMLFrag {
   public String renderAsStringHelpOne() {
     return this.txt.toString();
   }
-  // updates all attributes with the given name and the given value
-  public IXMLFrag updateAttributeHelpOne(String name, String value) {
-    return this;
-  }
+
 }
 
 // represents a document with at least one Tag
@@ -187,10 +175,7 @@ class Tagged implements IXMLFrag {
   public String renderAsStringHelpOne() {
     return this.content.renderAsString();
   }
-  // updates all attributes with the given name and the given value
-  public IXMLFrag updateAttributeHelpOne(String name, String value) {
-    return new Tagged(this.tag.updateAttributeHelpTwo(String name, String value), this.content.updateAttribute(name, value));
-  }
+
 }
 
 // represents a Tag with a name and a List of Attributes
@@ -221,18 +206,14 @@ class Tag {
       return false;
     }
   }
-  // updates all attributes with the given name and the given value
-  Tag updateAttributeHelpTwo(String name, String value) {
-    return new Tag(this.name, this.atts.updateAttributeHelpThree(String name, String value));
-  }
+
 }
 
 // represents a list of Attributes
 interface ILoAtt {
   // does this Attribute have the same name as the string given?
   boolean hasAttributeHelpThree(String that);
-  // updates all attributes with the given name and the given value
-  ILoAtt updateAttributeHelpThree(String name, String value);
+
 }
 
 // represents an empty list of Attributes 
@@ -273,15 +254,7 @@ class Att {
   boolean hasAttributeHelpFour(String that) {
     return this.name.equals(that);
   }
-  //updates all attributes with the given name and the given value
-  Att updateAttribute(String name, String value) {
-    if ((this.name == name) && (this.value == value)) {
-      return new Att(name, value);
-    }
-    else {
-      return this;
-    }
-  }
+
 }
 
 
