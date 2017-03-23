@@ -291,7 +291,7 @@ class Att {
      return new Att(this.name, value);
    }
    else {
-     throw new RuntimeException("No attribute with that name");
+     return this;
    }
  }
 
@@ -609,14 +609,36 @@ class ExamplesXML {
   // tests the updateAttHelpFour(name, value) method, a helper for updateAttribute(name, value)
   void testUpdateAttHelpFour(Tester t) {
     t.checkExpect(this.volumeAtt.updateAttHelpFour("volume", "5miles"), new Att("volume", "5miles"));
+    t.checkExpect(this.volumeAtt.updateAttHelpFour("duration", "45db"), this.volumeAtt);
     t.checkExpect(this.durationAtt.updateAttHelpFour("duration", "30sec"), new Att("duration", "30sec"));
+    t.checkExpect(this.durationAtt.updateAttHelpFour("volume", "7meters"), this.durationAtt);
   }
   
   // tests the updateAttHelpThree(name, value) method, a helper for updateAttribute(name, value)
   void testUpdateAttHelpThree(Tester t) {
-    t.checkExpect(this.empty_loatt.updateAttHelpThree("length", "5miles"), this.empty_loatt);
+    t.checkExpect(this.empty_loatt.updateAttHelpThree("volume", "5miles"), this.empty_loatt);
     t.checkExpect(this.volume_loatt.updateAttHelpThree("volume", "10dec"), 
         new ConsLoAtt(new Att("volume", "10dec"), new MtLoAtt()));
+    t.checkExpect(this.volume_loatt.updateAttHelpThree("duration", "10dec"), 
+        new ConsLoAtt(this.volumeAtt, new MtLoAtt()));
+    t.checkExpect(this.duration_loatt.updateAttHelpThree("duration", "3db"), 
+        new ConsLoAtt(new Att("duration", "3db"), new MtLoAtt()));
+    t.checkExpect(this.duration_loatt.updateAttHelpThree("volume", "3db"), 
+        new ConsLoAtt(this.durationAtt, new MtLoAtt()));
+    t.checkExpect(this.vthend_loatt.updateAttHelpThree("volume", "90db"), 
+        new ConsLoAtt(new Att("volume", "90db"), new ConsLoAtt(this.durationAtt, new MtLoAtt())));
+    t.checkExpect(this.vthend_loatt.updateAttHelpThree("duration", "1sec"), 
+        new ConsLoAtt(this.volumeAtt, new ConsLoAtt(new Att("duration", "1sec"), new MtLoAtt())));
+    t.checkExpect(this.vthend_loatt.updateAttHelpThree("hello", "90db"), 
+        new ConsLoAtt(this.volumeAtt, new ConsLoAtt(this.durationAtt, new MtLoAtt())));
+    t.checkExpect(this.dthenv_loatt.updateAttHelpThree("volume", "90db"), 
+        new ConsLoAtt(this.durationAtt, new ConsLoAtt(new Att("volume", "90db"), new MtLoAtt())));
+    t.checkExpect(this.dthenv_loatt.updateAttHelpThree("duration", "1sec"), 
+        new ConsLoAtt(new Att("duration", "1sec"), new ConsLoAtt(this.volumeAtt, new MtLoAtt())));
+    t.checkExpect(this.dthenv_loatt.updateAttHelpThree("hello", "90db"), 
+        new ConsLoAtt(this.durationAtt, new ConsLoAtt(this.volumeAtt, new MtLoAtt())));
+    
+    
   }
 
 
