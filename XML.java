@@ -617,20 +617,24 @@ class ExamplesXML {
   // tests the updateAttHelpThree(name, value) method, a helper for updateAttribute(name, value)
   void testUpdateAttHelpThree(Tester t) {
     t.checkExpect(this.empty_loatt.updateAttHelpThree("volume", "5miles"), this.empty_loatt);
+    
     t.checkExpect(this.volume_loatt.updateAttHelpThree("volume", "10dec"), 
         new ConsLoAtt(new Att("volume", "10dec"), new MtLoAtt()));
     t.checkExpect(this.volume_loatt.updateAttHelpThree("duration", "10dec"), 
         new ConsLoAtt(this.volumeAtt, new MtLoAtt()));
+    
     t.checkExpect(this.duration_loatt.updateAttHelpThree("duration", "3db"), 
         new ConsLoAtt(new Att("duration", "3db"), new MtLoAtt()));
     t.checkExpect(this.duration_loatt.updateAttHelpThree("volume", "3db"), 
         new ConsLoAtt(this.durationAtt, new MtLoAtt()));
+    
     t.checkExpect(this.vthend_loatt.updateAttHelpThree("volume", "90db"), 
         new ConsLoAtt(new Att("volume", "90db"), new ConsLoAtt(this.durationAtt, new MtLoAtt())));
     t.checkExpect(this.vthend_loatt.updateAttHelpThree("duration", "1sec"), 
         new ConsLoAtt(this.volumeAtt, new ConsLoAtt(new Att("duration", "1sec"), new MtLoAtt())));
     t.checkExpect(this.vthend_loatt.updateAttHelpThree("hello", "90db"), 
         new ConsLoAtt(this.volumeAtt, new ConsLoAtt(this.durationAtt, new MtLoAtt())));
+    
     t.checkExpect(this.dthenv_loatt.updateAttHelpThree("volume", "90db"), 
         new ConsLoAtt(this.durationAtt, new ConsLoAtt(new Att("volume", "90db"), new MtLoAtt())));
     t.checkExpect(this.dthenv_loatt.updateAttHelpThree("duration", "1sec"), 
@@ -638,6 +642,34 @@ class ExamplesXML {
     t.checkExpect(this.dthenv_loatt.updateAttHelpThree("hello", "90db"), 
         new ConsLoAtt(this.durationAtt, new ConsLoAtt(this.volumeAtt, new MtLoAtt())));
     
+    // tests the updateAttHelpTwo(name, value) method, a helper for updateAttribute(name, value)
+    t.checkExpect(this.yellTag.updateAttHelpTwo("volume", "20db"), this.yellTag);
+    t.checkExpect(this.yellTag.updateAttHelpTwo("duration", "20sec"), this.yellTag);
+    
+    t.checkExpect(this.italicTag.updateAttHelpTwo("volume", "20db"), this.italicTag);
+    t.checkExpect(this.italicTag.updateAttHelpTwo("duration", "20sec"), this.italicTag);
+    
+    t.checkExpect(this.yell2Tag.updateAttHelpTwo("volume", "20db"), 
+        new Tag("yell", new ConsLoAtt(new Att("volume", "20db"), new MtLoAtt())));
+    t.checkExpect(this.yell2Tag.updateAttHelpTwo("duration", "20sec"), this.yell2Tag);
+    
+    t.checkExpect(this.yell3Tag.updateAttHelpTwo("volume", "20db"), 
+        new Tag("yell", new ConsLoAtt(new Att("volume", "20db"), new ConsLoAtt(this.durationAtt, new MtLoAtt()))));
+    t.checkExpect(this.yell3Tag.updateAttHelpTwo("duration", "20sec"), 
+        new Tag("yell", new ConsLoAtt(this.volumeAtt, new ConsLoAtt(new Att("duration", "20sec"), new MtLoAtt()))));
+    
+    // tests the updateAttHelpOne(name, value) method, a helper for updateAttribute(name, value)
+    t.checkExpect(this.plaintext.updateAttHelpOne("volume", "20db"), this.plaintext);
+    t.checkExpect(this.plaintext.updateAttHelpOne("duration", "20sec"), this.plaintext);
+    
+    t.checkExpect(this.tagged.updateAttHelpOne("volume", "20db"), this.tagged);
+    t.checkExpect(this.tagged.updateAttHelpOne("duration", "20sec"), this.tagged);
+    
+    t.checkExpect(this.complex.updateAttHelpOne("volume", "20db"), 
+        new Tagged(new Tag("yell", new ConsLoAtt(new Att("volume", "20db"), new MtLoAtt())), 
+            new ConsLoXMLFrag(new Plaintext("I am XML!"), 
+                new MtLoXMLFrag())));
+    t.checkExpect(this.complex.updateAttHelpOne("duration", "20sec"), this.complex);
     
   }
 
